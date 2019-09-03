@@ -38,3 +38,5 @@ flutter:
         - asset: assets/fonts/ProductSans-Bold.ttf
           weight: 700
 
+  assets:
+    - assets/database.db

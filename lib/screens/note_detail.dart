@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:notes_app/db_helper/db_helper.dart';
+import 'package:notes_app/modal_class/folder.dart';
 import 'package:notes_app/modal_class/notes.dart';
 import 'package:notes_app/utils/widgets.dart';
 
 class NoteDetail extends StatefulWidget {
   final String appBarTitle;
   final Note note;
+  final Folder folder;
 
-  NoteDetail(this.note, this.appBarTitle);
+  NoteDetail(this.note, this.folder,  this.appBarTitle);
 
   @override
   State<StatefulWidget> createState() {
-    return NoteDetailState(this.note, this.appBarTitle);
+    return NoteDetailState(this.note, this.folder, this.appBarTitle);
   }
 }
 
@@ -26,7 +28,9 @@ class NoteDetailState extends State<NoteDetail> {
   int color;
   bool isEdited = false;
 
-  NoteDetailState(this.note, this.appBarTitle);
+  final Folder folder;
+
+  NoteDetailState(this.note, this.folder, this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
@@ -264,12 +268,13 @@ class NoteDetailState extends State<NoteDetail> {
     if (note.id != null) {
       await helper.updateNote(note);
     } else {
+      note.folderId = folder.id;
       await helper.insertNote(note);
     }
   }
 
   void _delete() async {
-    await helper.deleteNote(note.id);
+    await helper.deleteNote(note.id, folder.id);
     moveToLastScreen();
   }
 }
